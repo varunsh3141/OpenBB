@@ -19,8 +19,13 @@ jobs:
     runs-on: [self-hosted, macos, ARM64]
     steps:
       # Checkout repository main branch. this allows for the commit hashes to line up
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - name: Git Log
         run: git log
       # The following commands to clear previous PATHS and restore to defaults since we have to maintain the instance ourselves
@@ -31,13 +36,13 @@ jobs:
           echo $PATH
       # Set up caching for conda env so that the workflow runs quickly after the first time
       - name: Setup Conda Caching
-        uses: actions/cache@v3
+        uses: actions/cache@2f8e54208210a422b2efd51efaa6bd6d7ca8920f # v3.4.3
         with:
           path: ~/conda_pkgs_dir
           key: conda-macos-3-10-${{ hashFiles('build/conda/environments/constructor.yml') }}
       # Set up miniconda using the environment yaml file within the repo
       - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v3.0.4
+        uses: conda-incubator/setup-miniconda@a4260408e20b96e80095f42ff7f1a15b27dd94ca # v3.0.4
         with:
           miniconda-version: "latest"
           auto-update-conda: true
@@ -106,7 +111,7 @@ jobs:
           xcrun stapler staple OpenBB-Platform-MacOSX-arm64.pkg
 
       - name: Save Build Artifact PKG
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: OpenBBM1.pkg
           path: OpenBB-Platform-MacOSX-arm64.pkg
@@ -121,8 +126,13 @@ jobs:
     runs-on: [self-hosted, macos, x64]
     steps:
       # Checkout repository main branch. this allows for the commit hashes to line up
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - name: Git Log
         run: git log
       # The following commands to clear previous PATHS and restore to defaults since we have to maintain the instance ourselves
@@ -133,13 +143,13 @@ jobs:
           echo $PATH
       # Set up caching for conda env so that the workflow runs quickly after the first time
       - name: Setup Conda Caching
-        uses: actions/cache@v3
+        uses: actions/cache@2f8e54208210a422b2efd51efaa6bd6d7ca8920f # v3.4.3
         with:
           path: ~/conda_pkgs_dir
           key: conda-macos-3-10-${{ hashFiles('build/conda/environments/constructor.yml') }}
       # Set up miniconda using the environment yaml file within the repo
       - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v3.0.4
+        uses: conda-incubator/setup-miniconda@a4260408e20b96e80095f42ff7f1a15b27dd94ca # v3.0.4
         with:
           miniconda-version: "latest"
           auto-update-conda: true
@@ -208,7 +218,7 @@ jobs:
           xcrun stapler staple OpenBB-Platform-MacOSX-x86_64.pkg
 
       - name: Save Build Artifact PKG
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: OpenBBIntel.pkg
           path: OpenBB-Platform-MacOSX-x86_64.pkg

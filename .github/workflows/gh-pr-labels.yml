@@ -8,18 +8,23 @@ jobs:
   label:
     runs-on: ubuntu-latest
     steps:
-      # - uses: mheap/github-action-required-labels@v1
+      # - uses: mheap/github-action-required-labels@d2892166405e47deea29d2052ab4cca1382df41e # v1.2.0
       #   with:
       #     mode: minimum
       #     count: 1
       #     labels: "guides, bug, build, docker, docs, feat XS, feat S, feat M, feat L, feat XL, help wanted, refactor, tests, dependencies, release"
-      - uses: mheap/github-action-required-labels@v1
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
+        with:
+          egress-policy: audit
+
+      - uses: mheap/github-action-required-labels@d2892166405e47deea29d2052ab4cca1382df41e # v1.2.0
         with:
           mode: exactly
           count: 0
           labels: "do not merge"
 
       - name: 🏷️ Label OpenBB Platform PRs
-        uses: srvaroa/labeler@master
+        uses: srvaroa/labeler@e216fb40e2e6d3b17d90fb1d950f98bee92f65ce # master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

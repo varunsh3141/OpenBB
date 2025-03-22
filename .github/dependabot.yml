@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /examples/openbb-apachebeam
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /examples/streamlit
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /frontend-components/plotly
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /frontend-components/tables
+    schedule:
+      interval: daily

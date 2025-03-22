@@ -20,8 +20,13 @@ jobs:
       OPENBB_API_PASSWORD: "PASS"
 
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481 # v2.11.0
+        with:
+          egress-policy: audit
+
       - name: Slack Notification - Starting
-        uses: act10ns/slack@v1
+        uses: act10ns/slack@87c73aef9f8838eb6feae81589a6b1487a4a9e08 # v1.6.0
         with:
           status: starting
           channel: "#workflows"
@@ -29,14 +34,14 @@ jobs:
         if: always()
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Checkout specific ref
         if: github.event_name == 'pull_request'
         run: git fetch origin ${{ github.event.pull_request.head.ref }} && git checkout FETCH_HEAD
 
       - name: Setup Python 3.10
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: "3.10"
           architecture: x64
@@ -98,7 +103,7 @@ jobs:
           pytest openbb_platform -m integration
 
       - name: Upload summary to Slack
-        uses: adrey/slack-file-upload-action@master
+        uses: adrey/slack-file-upload-action@3a8bf885cca22bedbfc68209083e0d8d21f12037 # master
         with:
           token: ${{ secrets.SLACK_API_TOKEN }}
           initial_comment: "API Integration test summary"
@@ -107,7 +112,7 @@ jobs:
           channel: ${{ secrets.SLACK_CHANNEL_ID }}
 
       - name: Slack Notification - Success/Failure
-        uses: act10ns/slack@v1
+        uses: act10ns/slack@87c73aef9f8838eb6feae81589a6b1487a4a9e08 # v1.6.0
         with:
           status: ${{ job.status }}
           steps: ${{ toJson(steps) }}
